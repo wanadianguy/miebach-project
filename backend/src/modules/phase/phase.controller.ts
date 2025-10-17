@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, ParseUUIDPipe } from '@nestjs/common';
 import { PhaseService } from './phase.service';
 import { CreatePhaseDto } from './dto/create-phase.dto';
 import { UpdatePhaseDto } from './dto/update-phase.dto';
@@ -26,21 +26,21 @@ export class PhaseController {
     //@Roles(Role.MANAGER)
     @Get(':id')
     @ApiOperation({ summary: 'Get a phase by id' })
-    async findOne(@Param('id') id: string) {
+    async findOne(@Param('id', ParseUUIDPipe) id: string) {
         return this.phasesService.findOne(id);
     }
 
     //@Roles(Role.MANAGER)
     @Get('project/:projectId')
     @ApiOperation({ summary: 'Get phases by project id' })
-    async findByProject(@Param('projectId') projectId: string) {
+    async findByProject(@Param('projectId', ParseUUIDPipe) projectId: string) {
         return this.phasesService.findByProject(projectId);
     }
 
     //@Roles(Role.MANAGER)
     @Patch(':id')
     @ApiOperation({ summary: 'Update a phase' })
-    async update(@Param('id') id: string, @Body() updatePhaseDto: UpdatePhaseDto) {
+    async update(@Param('id', ParseUUIDPipe) id: string, @Body() updatePhaseDto: UpdatePhaseDto) {
         return this.phasesService.update(id, updatePhaseDto);
     }
 
@@ -48,7 +48,7 @@ export class PhaseController {
     @Delete(':id')
     @ApiOperation({ summary: 'Delete a phase' })
     @HttpCode(204)
-    async remove(@Param('id') id: string) {
+    async remove(@Param('id', ParseUUIDPipe) id: string) {
         return this.phasesService.remove(id);
     }
 }

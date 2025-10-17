@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, ParseUUIDPipe } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -26,21 +26,21 @@ export class TaskController {
     //@Roles(Role.MANAGER)
     @Get(':id')
     @ApiOperation({ summary: 'Get a task by id' })
-    findOne(@Param('id') id: string) {
+    findOne(@Param('id', ParseUUIDPipe) id: string) {
         return this.tasksService.findOne(id);
     }
 
     //@Roles(Role.MANAGER)
     @Get('phase/:phaseId')
     @ApiOperation({ summary: 'Get tasks by phase id' })
-    findByPhase(@Param('phaseId') phaseId: string) {
+    findByPhase(@Param('phaseId', ParseUUIDPipe) phaseId: string) {
         return this.tasksService.findByPhase(phaseId);
     }
 
     //@Roles(Role.MANAGER)
     @Patch(':id')
     @ApiOperation({ summary: 'Update a task' })
-    update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() updateTaskDto: UpdateTaskDto) {
         return this.tasksService.update(id, updateTaskDto);
     }
 
@@ -48,7 +48,7 @@ export class TaskController {
     @Delete(':id')
     @ApiOperation({ summary: 'Delete a task' })
     @HttpCode(204)
-    remove(@Param('id') id: string) {
+    remove(@Param('id', ParseUUIDPipe) id: string) {
         return this.tasksService.remove(id);
     }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { AssignmentService } from './assignment.service';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 
@@ -21,26 +21,26 @@ export class AssignmentController {
 
     //@Roles(Role.MANAGER)
     @Get(':id')
-    findOne(@Param('id') id: string) {
+    findOne(@Param('id', ParseUUIDPipe) id: string) {
         return this.assignmentsService.findOne(id);
     }
 
     //@Roles(Role.MANAGER)
     @Get('task/:taskId')
-    findByTask(@Param('taskId') taskId: string) {
+    findByTask(@Param('taskId', ParseUUIDPipe) taskId: string) {
         return this.assignmentsService.findByTask(taskId);
     }
 
     //@Roles(Role.MANAGER)
     @Get('user/:userId')
-    findByUser(@Param('userId') userId: string) {
+    findByUser(@Param('userId', ParseUUIDPipe) userId: string) {
         return this.assignmentsService.findByUser(userId);
     }
 
     //@Roles(Role.MANAGER)
     @Delete(':id')
     @HttpCode(204)
-    remove(@Param('id') id: string) {
+    remove(@Param('id', ParseUUIDPipe) id: string) {
         return this.assignmentsService.remove(id);
     }
 }

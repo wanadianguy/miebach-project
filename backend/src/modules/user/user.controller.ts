@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, HttpCode, Param } from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiOperation } from '@nestjs/swagger';
 
@@ -24,7 +24,7 @@ export class UserController {
     @Delete(':id')
     @ApiOperation({ summary: 'Delete user' })
     @HttpCode(204)
-    remove(@Param('id') id: string) {
+    remove(@Param('id', ParseUUIDPipe) id: string) {
         return this.userService.remove(id);
     }
 }

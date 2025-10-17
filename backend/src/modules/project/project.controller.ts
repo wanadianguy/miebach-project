@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, ParseUUIDPipe } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
@@ -26,14 +26,14 @@ export class ProjectController {
     //@Roles(Role.MANAGER)
     @Get(':id')
     @ApiOperation({ summary: 'Get a project by id' })
-    findOne(@Param('id') id: string) {
+    findOne(@Param('id', ParseUUIDPipe) id: string) {
         return this.projectsService.findOne(id);
     }
 
     //@Roles(Role.MANAGER)
     @Patch(':id')
     @ApiOperation({ summary: 'Update a project' })
-    update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() updateProjectDto: UpdateProjectDto) {
         return this.projectsService.update(id, updateProjectDto);
     }
 
@@ -41,7 +41,7 @@ export class ProjectController {
     @Delete(':id')
     @ApiOperation({ summary: 'Delete a project' })
     @HttpCode(204)
-    remove(@Param('id') id: string) {
+    remove(@Param('id', ParseUUIDPipe) id: string) {
         return this.projectsService.remove(id);
     }
 }

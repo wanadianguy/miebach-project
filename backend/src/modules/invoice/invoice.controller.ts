@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, ParseUUIDPipe } from '@nestjs/common';
 import { InvoiceService } from './invoice.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
@@ -26,21 +26,21 @@ export class InvoiceController {
     //@Roles(Role.MANAGER)
     @Get(':id')
     @ApiOperation({ summary: 'Get an invoice by id' })
-    findOne(@Param('id') id: string) {
+    findOne(@Param('id', ParseUUIDPipe) id: string) {
         return this.invoicesService.findOne(id);
     }
 
     //@Roles(Role.MANAGER)
     @Get('project/:projectId')
     @ApiOperation({ summary: 'Get invoices by project id' })
-    findByProject(@Param('projectId') projectId: string) {
+    findByProject(@Param('projectId', ParseUUIDPipe) projectId: string) {
         return this.invoicesService.findByProject(projectId);
     }
 
     //@Roles(Role.MANAGER)
     @Patch(':id')
     @ApiOperation({ summary: 'Update an invoice' })
-    update(@Param('id') id: string, @Body() updateInvoiceDto: UpdateInvoiceDto) {
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() updateInvoiceDto: UpdateInvoiceDto) {
         return this.invoicesService.update(id, updateInvoiceDto);
     }
 
@@ -48,7 +48,7 @@ export class InvoiceController {
     @Delete(':id')
     @ApiOperation({ summary: 'Delete an invoice' })
     @HttpCode(204)
-    remove(@Param('id') id: string) {
+    remove(@Param('id', ParseUUIDPipe) id: string) {
         return this.invoicesService.remove(id);
     }
 }
