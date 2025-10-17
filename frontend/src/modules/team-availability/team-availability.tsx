@@ -1,143 +1,4 @@
-/*import { useEffect, useState } from "react";
-import type { TeamAvailabilityProps } from "./team-availability.types";
-import type { User } from "../../types/user.type";
-import {
-    Box,
-    Chip,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Typography,
-} from "@mui/material";
-import type { TimeEntry } from "../../types/time-entry.type";
-
-export const TeamAvailability = ({ projects }: TeamAvailabilityProps) => {
-    const [contributors, setContributors] = useState<User[]>([]);
-
-    useEffect(() => {
-        fetch("http://localhost:3001/users/contributor", {
-            method: "GET",
-            mode: "cors",
-        })
-            .then((response) => {
-                return response.json();
-            })
-            .then((data: User[]) => {
-                setContributors(data);
-            })
-            .catch((error) => {
-                console.error("Something went wrong: " + error.message);
-                return;
-            });
-    }, []);
-
-    const getTimeEntries = (userId: string) => {
-        return fetch(`http://localhost:3001/time-entries/user/?${userId}`, {
-            method: "GET",
-            mode: "cors",
-        })
-            .then((response) => {
-                return response.json();
-            })
-            .then((data: TimeEntry[]) => {
-                return data;
-            })
-            .catch((error) => {
-                console.error("Something went wrong: " + error.message);
-                return;
-            });
-    };
-
-    const calculateUtilization = (userId: string) => {
-        let forecasted = 0;
-        let logged = 0;
-
-        projects.forEach((project) => {
-            project.staffing.forEach((staff) => {
-                if (staff.user.id === userId)
-                    forecasted += staff.forecastedHours;
-            });
-        });
-
-        getTimeEntries(userId).then((timeEntries) => {
-            if (!timeEntries) return;
-            else {
-                timeEntries.forEach((entry) => {
-                    logged += entry.hours;
-                });
-            }
-        });
-
-        return {
-            forecasted,
-            logged,
-            utilization: forecasted > 0 ? (logged / forecasted) * 100 : 0,
-        };
-    };
-
-    return (
-        <Box>
-            <Typography variant="h5" gutterBottom>
-                Team Availability & Utilization
-            </Typography>
-
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Name</TableCell>
-                            <TableCell align="right">
-                                Forecasted Hours
-                            </TableCell>
-                            <TableCell align="right">Logged Hours</TableCell>
-                            <TableCell align="right">Remaining</TableCell>
-                            <TableCell align="right">Utilization</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {contributors.map((contributor) => {
-                            const util = calculateUtilization(contributor.id);
-                            return (
-                                <TableRow key={contributor.id}>
-                                    <TableCell>{contributor.name}</TableCell>
-                                    <TableCell align="right">
-                                        {util.forecasted}h
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {util.logged}h
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {util.forecasted - util.logged}h
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <Chip
-                                            label={`${util.utilization.toFixed(0)}%`}
-                                            color={
-                                                util.utilization > 80
-                                                    ? "error"
-                                                    : util.utilization > 50
-                                                      ? "warning"
-                                                      : "success"
-                                            }
-                                            size="small"
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Box>
-    );
-};
-*/
-
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
     Box,
     FormControl,
@@ -204,6 +65,16 @@ export const TeamAvailability = () => {
                 return response.json();
             })
             .then((data: Assignment[]) => {
+                if (data.length >= 2) {
+                    data.sort((a, b) => {
+                        const dateA = new Date(a.task!.dueDate);
+                        const dateB = new Date(b.task!.dueDate);
+
+                        if (!dateA) return 1;
+                        if (!dateB) return -1;
+                        return dateA.getTime() - dateB.getTime();
+                    });
+                }
                 setAssignments(data);
             })
             .catch((error) => {
@@ -315,7 +186,7 @@ export const TeamAvailability = () => {
                                                 variant="body2"
                                                 fontWeight="medium"
                                             >
-                                                {`${assignment.task?.startDate} - ${assignment.task?.endDate}`}
+                                                {`${assignment.task?.startDate} - ${assignment.task?.dueDate}`}
                                             </Typography>
                                         </Box>
                                     </Box>

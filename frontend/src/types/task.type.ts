@@ -7,6 +7,7 @@ export type Task = {
   title: string;
   description: string;
   startDate: string;
+  dueDate: string;
   endDate: string;
   status: "planned" | "in progress" | "done";
   budget: number;
