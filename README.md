@@ -25,6 +25,7 @@
 - Add useful tools to the overview tab of the detailed project view like a burndown chart
 - Create environment variables for the frontend
 - Create more feedback for the user (e.g.: when creating an invoice)
+- Create tests and comment code for maintainability
 - Fix a few bugs I came across
 ## Side notes
 - The authentication checks are deactivated (Anotation commented) to ease the testing, especially with Postman
