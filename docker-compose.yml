@@ -1,0 +1,39 @@
+name: miebach-project
+
+services:
+    frontend:
+        build:
+            context: "./frontend"
+            dockerfile: "frontend.Dockerfile"
+        container_name: miebach-frontend
+        ports:
+            - 5173:5173
+        environment:
+            - NODE_ENV=production
+            - TZ=America/Toronto
+        restart: unless-stopped
+    backend:
+        build:
+            context: "./backend"
+            dockerfile: "backend.Dockerfile"
+        container_name: miebach-backend
+        ports:
+            - 3001:3001
+        environment:
+            - NODE_ENV=production
+            - TZ=America/Toronto
+        restart: unless-stopped
+    database:
+        image: bitnami/postgresql:latest
+        container_name: miebach-database
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRESQL_DATABASE=miebach
+            - POSTGRESQL_PASSWORD=password
+            - POSTGRESQL_POSTGRES_PASSWORD=password
+            - POSTGRESQL_TIMEZONE=America/Toronto
+            - POSTGRESQL_LOG_TIMEZONE=America/Toronto
+        restart: unless-stopped
+        volumes:
+            - ./data/postgresql:/bitnami/postgresql
