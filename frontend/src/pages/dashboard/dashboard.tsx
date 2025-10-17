@@ -1,11 +1,18 @@
 import { useNavigate } from "react-router";
 import { ContributorDashboard } from "../../modules/contributor-dashboard/contributor-dashboard";
 import { ManagerDashboard } from "../../modules/manager-dashboard/manager-dashboard";
+import { useEffect } from "react";
 
 export const Dashboard = () => {
     const navigate = useNavigate();
     const role = localStorage.getItem("role");
-    if (role !== "manager" && role !== "contributor") navigate("/");
+
+    useEffect(() => {
+        if (!role) {
+            localStorage.clear();
+            navigate("/login");
+        }
+    }, []);
 
     const handleLogout = () => {
         localStorage.clear();
@@ -14,9 +21,10 @@ export const Dashboard = () => {
 
     return (
         <div>
-            {role === "manager" ? (
+            {role === "manager" && (
                 <ManagerDashboard onLogout={() => handleLogout()} />
-            ) : (
+            )}
+            {role === "contributor" && (
                 <ContributorDashboard onLogout={() => handleLogout()} />
             )}
         </div>

@@ -225,7 +225,7 @@ export const TeamAvailability = () => {
                         startIcon={<Add />}
                         onClick={() => setNewAssignmentOpen(true)}
                     >
-                        Add Task
+                        Add Assignment
                     </Button>
                 )}
             </Box>

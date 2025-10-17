@@ -42,6 +42,11 @@ export const ProjectCard = ({
                 >
                     <Box sx={{ flex: 1 }}>
                         <Typography variant="h6">{project.name}</Typography>
+                        <Chip
+                            label={project.status}
+                            size="small"
+                            sx={{ mr: 1 }}
+                        />
                         <Typography color="text.secondary" variant="body2">
                             Client: {project.clientName}
                         </Typography>

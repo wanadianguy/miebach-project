@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { NewTaskDialogProps } from "./new-task-dialog.types";
 import {
     Button,
@@ -43,20 +43,12 @@ export const NewTaskDialog = ({
                 description,
                 startDate: startDate.date,
                 dueDate: endDate.date,
+                endDate: new Date(),
                 status: "planned",
             }),
         })
             .then((response) => {
                 return response.json();
-            })
-            .then((data: Task) => {
-                const phase = project.phases.find(
-                    (phase) => (phase.id = phaseId),
-                );
-                if (phase) {
-                    phase.tasks?.push(data);
-                    onSave(phase);
-                }
             })
             .catch((error) => {
                 console.error("Something went wrong: " + error.message);
