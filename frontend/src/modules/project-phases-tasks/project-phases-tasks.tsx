@@ -11,8 +11,8 @@ import type { ProjectPhasesTasksProps } from "./project-phases-tasks.types";
 import { Add } from "@mui/icons-material";
 import { useState } from "react";
 import { NewPhaseDialog } from "../new-phase-dialog/new-phase-dialog";
-import type { Phase } from "../../types/phase.type";
 import { NewTaskDialog } from "../new-task-dialog/new-task-dialog";
+import type { Project } from "../../types/project.type";
 
 export const ProjectPhasesTasks = ({
     project,
@@ -121,8 +121,7 @@ export const ProjectPhasesTasks = ({
                 project={project}
                 open={newPhaseOpen}
                 onClose={() => setNewPhaseOpen(false)}
-                onSave={(phase: Phase) => {
-                    project.phases.push(phase);
+                onSave={(project: Project) => {
                     onSave(project);
                 }}
             />
@@ -130,8 +129,7 @@ export const ProjectPhasesTasks = ({
                 project={project}
                 open={newTaskOpen}
                 onClose={() => setNewTaskOpen(false)}
-                onSave={(phase: Phase) => {
-                    project.phases.push(phase);
+                onSave={(project: Project) => {
                     onSave(project);
                 }}
             />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { NewTaskDialogProps } from "./new-task-dialog.types";
 import {
     Button,
@@ -10,7 +10,6 @@ import {
     Select,
     TextField,
 } from "@mui/material";
-import type { Task } from "../../types/task.type";
 
 export const NewTaskDialog = ({
     project,

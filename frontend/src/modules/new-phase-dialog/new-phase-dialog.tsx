@@ -16,6 +16,7 @@ export const NewPhaseDialog = ({
     onClose,
     onSave,
 }: NewPhaseDialogProps) => {
+    const [requestInProgress, setRequestInProgress] = useState(false);
     const [name, setName] = useState("");
     const [startDate, setStartDate] = useState({
         date: new Date(),
@@ -27,6 +28,7 @@ export const NewPhaseDialog = ({
     });
 
     const handleSubmit = () => {
+        setRequestInProgress(true);
         fetch("http://localhost:3001/phases", {
             method: "POST",
             mode: "cors",
@@ -44,22 +46,26 @@ export const NewPhaseDialog = ({
             .then((response) => {
                 return response.json();
             })
-            .then((data: Phase) => onSave(data))
+            .then((data: Phase) => {
+                project.phases.push(data);
+                onSave(project);
+                setRequestInProgress(false);
+                setName("");
+                setStartDate({
+                    date: new Date(),
+                    string: "",
+                });
+                setEndDate({
+                    date: new Date(),
+                    string: "",
+                });
+                onClose();
+            })
             .catch((error) => {
                 console.error("Something went wrong: " + error.message);
+                setRequestInProgress(false);
                 return;
             });
-
-        setName("");
-        setStartDate({
-            date: new Date(),
-            string: "",
-        });
-        setEndDate({
-            date: new Date(),
-            string: "",
-        });
-        onClose();
     };
 
     return (
@@ -104,7 +110,11 @@ export const NewPhaseDialog = ({
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={handleSubmit} variant="contained">
+                <Button
+                    onClick={handleSubmit}
+                    variant="contained"
+                    disabled={requestInProgress}
+                >
                     Create
                 </Button>
             </DialogActions>
